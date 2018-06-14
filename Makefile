@@ -78,7 +78,7 @@ DOCKERIZE =
 # Implementation specific settings
 #
 
-IMPLS = ada awk bash basic c chuck clojure coffee common-lisp cpp crystal cs d dart \
+IMPLS = ada anton awk bash basic c chuck clojure coffee common-lisp cpp crystal cs d dart \
 	elisp elixir elm erlang es6 factor forth fsharp go groovy gst guile haskell \
 	haxe hy io java js julia kotlin livescript logo lua make mal matlab miniMAL \
 	nasm nim objc objpascal ocaml perl perl6 php pil plpgsql plsql powershell ps \
@@ -171,6 +171,7 @@ scheme_STEP_TO_PROG_cyclone     = scheme/$($(1))
 scheme_STEP_TO_PROG_foment      = scheme/$($(1)).scm
 
 # Map of step (e.g. "step8") to executable file for that step
+anton_STEP_TO_PROG =   anton/$($(1)).js
 ada_STEP_TO_PROG =     ada/$($(1))
 awk_STEP_TO_PROG =     awk/$($(1)).awk
 bash_STEP_TO_PROG =    bash/$($(1)).sh
