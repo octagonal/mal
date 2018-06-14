@@ -1,38 +1,40 @@
 const readline = require('readline');
+const argv = require('yargs').argv;
 
-function read (input) {
+const terminal = !!argv.terminal;
+
+function READ (input) {
     return input;
 }
 
-function eeval (input) {
+function EVAL (input) {
     return input;
 }
 
-function print (input) {
+function PRINT (input) {
     return input;
 }
 
 function rep (input) {
-    return print(eeval(read(input)));
+    return PRINT(EVAL(READ(input)));
 }
 
 function loop () {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
-        prompt: 'user> '
+        terminal,
+        prompt: 'user> ',
     });
 
-    const PRESERVE_CURSORPOS = false;
-    const prompt = () => rl.prompt(PRESERVE_CURSORPOS);
-    prompt();
+    rl.prompt();
 
     rl.on('line', (line) => {
         const data = rep(line.trim());
 
-        data && process.stdout.write(data + '\r\n');
+        data && process.stdout.write(`${data}\n`);
 
-        prompt();
+        rl.prompt();
     });
 
     rl.on('close', () => {
