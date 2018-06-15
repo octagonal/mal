@@ -1,10 +1,13 @@
 const readline = require('readline');
 const argv = require('yargs').argv;
 
+const { read_str } = require('./reader.js');
+const { pr_str } = require('./printer.js');
+
 const terminal = !!argv.terminal;
 
 function READ (input) {
-    return input;
+    return read_str(input);
 }
 
 function EVAL (input) {
@@ -12,7 +15,7 @@ function EVAL (input) {
 }
 
 function PRINT (input) {
-    return input;
+    return pr_str(input);
 }
 
 function rep (input) {
@@ -30,9 +33,9 @@ function loop () {
     rl.prompt();
 
     rl.on('line', (line) => {
-        const data = rep(line.trim());
+        const data = line.trim();
 
-        data && process.stdout.write(`${data}\n`);
+        data && process.stdout.write(`${rep(data)}\n`);
 
         rl.prompt();
     });
