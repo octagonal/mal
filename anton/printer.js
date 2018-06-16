@@ -3,9 +3,7 @@ function print (form) {
         return `(${form.map(atom => print(atom)).join(' ')})`;
     }
 
-    const [value] = Object.values(form);
-
-    return value;
+    return form.atom;
 }
 
 module.exports = {

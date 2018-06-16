@@ -35,9 +35,14 @@ function loop () {
     rl.on('line', (line) => {
         const data = line.trim();
 
-        data && process.stdout.write(`${rep(data)}\n`);
-
-        rl.prompt();
+        try {
+            const form = data && rep(data);
+            form && process.stdout.write(`${form}\n`);
+        } catch (error) {
+            process.stdout.write(`${error.message}\n`);
+        } finally {
+            rl.prompt();
+        }
     });
 
     rl.on('close', () => {

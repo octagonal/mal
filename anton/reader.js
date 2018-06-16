@@ -17,34 +17,25 @@
   ['+' 2 ['*' 3 4]]
 */
 
+const constants = require('./constants');
+const { isNumeric, head, rest } = require('./util');
+
 const PLEFT = '(';
 const PRIGHT = ')';
 
 function readAtom (atom) {
-    function isNumeric(n) {
-        return !isNaN(parseFloat(n)) && isFinite(n);
-    }
-
     if (isNumeric(atom)) {
-        return { Num: atom };
+        return { type: constants.NUMBER, atom };
     }
 
-    return { Sym: atom };
+    return { type: constants.SYMBOL, atom };
 
     throw Error('Unsupported type');
 }
 
-function head ([headToken]) {
-    return headToken;
-}
-
-function rest ([,...restTokens]) {
-    return restTokens;
-}
-
 function readList (list, processTokens) {
     if (processTokens.length === 0) {
-        throw Error(`Unmatched ${PLEFT}`);
+        throw Error(`expected ${PRIGHT}, got EOF`);
     }
 
     if (head(processTokens) === PRIGHT) {
@@ -58,10 +49,27 @@ function readList (list, processTokens) {
 
 function readForm (tokens) {
     if (head(tokens) === PLEFT) {
-        return readList([], rest(tokens));
+        const [list, remainingTokens] = readList([], rest(tokens));
+        return [list, remainingTokens];
     }
 
-    return [readAtom(head(tokens)), rest(tokens)];
+    const expand = (expansion) => {
+        const [list, remainingTokens] = readForm(rest(tokens));
+        return [[readAtom(expansion), list], remainingTokens];
+    };
+
+    switch(head(tokens)) {
+        case constants.QUOTE:
+            return expand('quote');
+        case constants.QUASI:
+            return expand('quasiquote');
+        case constants.UNQUOTE:
+            return expand('unquote');
+        case constants.SPLICE:
+            return expand('splice-unquote');
+        default:
+            return [readAtom(head(tokens)), rest(tokens)];
+    }
 }
 
 function tokenizer (input) {
@@ -79,7 +87,7 @@ function readStr (line) {
     const [form, remainingTokens] = readForm(tokenizer(line));
 
     if(remainingTokens.length) {
-        throw Error(`Unmatched ${PRIGHT}`);
+        throw Error(`expected ${PLEFT}, got EOF`);
     }
 
     return form;
