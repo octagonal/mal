@@ -1,17 +1,17 @@
 function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-function head ([headToken]) {
-    return headToken;
+function head([headToken]) {
+  return headToken;
 }
 
-function rest ([,...restTokens]) {
-    return restTokens;
+function rest([, ...restTokens]) {
+  return restTokens;
 }
 
 module.exports = {
-    isNumeric,
-    head,
-    rest,
-}
+  isNumeric,
+  head,
+  rest,
+};
